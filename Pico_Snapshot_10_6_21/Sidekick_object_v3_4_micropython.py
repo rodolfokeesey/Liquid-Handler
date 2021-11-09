@@ -130,7 +130,7 @@ class Sidekick:
     def loadplate(self):
         platefile = open("platemap1.txt","r")
         emptyplate = platefile.read()
-        emptyplate = emptyplate.split("\n")
+        emptyplate = emptyplate.replace("\r", "").split("\n")
         platelength = int((len(emptyplate) - 4)/3)
         sectionlength = int((len(emptyplate) - 1)/3)
         theta_one = emptyplate[1:sectionlength]
