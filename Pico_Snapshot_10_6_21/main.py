@@ -41,6 +41,8 @@ while True:
         alpha.remap()
     elif command == ("set purge"):
         alpha.purgeset()
+    elif command == ("execute saved protocol"):
+        alpha.execute_protocol(saved_protocol.csv)
     #### Parses basic functions from instructions
     else:
         parsed = com_parser(command)

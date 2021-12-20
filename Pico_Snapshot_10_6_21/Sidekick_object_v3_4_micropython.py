@@ -677,38 +677,3 @@ class Sidekick:
                 
 #alpha = Sidekick(7,3,10,0.5,[0,0],[90,178],[119.484,171.701])
 
-
-#for x in range(10):
-#    alpha.motor2_onestep(True)
-
-#for x in range(10):
-#    alpha.motor1_onestep(True)
-
-#alpha.initialize()
-#print(alpha.current)
-
-#alpha.movetopurge("p1")
-#alpha.dispense1(100)
-#alpha.movetopurge("p2")
-#alpha.dispense2(100)
-#alpha.movetopurge("p3")
-#alpha.dispense3(100)
-#alpha.movetopurge("p4")
-#alpha.dispense4(100)
-
-#alpha.execute_protocol("flag_demo_cheat.csv")
-
-#alpha.return_home()
-
-
-#print(alpha.current)
-#platefile = open("platemap1.txt","r")
-#emptyplate = platefile.read()
-#emptyplate = emptyplate.split("\n")
-#platelength = int((len(emptyplate) - 4)/3)
-#sectionlength = int((len(emptyplate) - 1)/3)
-#theta_one = emptyplate[1:sectionlength]
-#theta_two = emptyplate[sectionlength+1:sectionlength*2]
-#well_ids = emptyplate[(sectionlength*2)+1:len(emptyplate)-1]
-#platefile.close()
-#return[theta_one,theta_two,well_ids]
