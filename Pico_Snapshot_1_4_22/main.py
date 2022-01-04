@@ -9,7 +9,6 @@ alpha = Sidekick(7,3,10,0.5,[0,0],[90,178],[119.484,171.701])
 alpha.initialize()
 #alpha.release()
 
-
 # Main loop, awaiting command
 
 
@@ -17,7 +16,7 @@ while True:
     # Get User Input
     command = input("awaiting command\n")
     command = command.lower()
-    #alpha.record_command(command)
+    
     
     #### Calibration/Troubleshooting functions
     # Initializing/Homing: Input Initialize
@@ -40,10 +39,10 @@ while True:
         alpha.manualpurge()
     elif command == ("remap"):
         alpha.remap()
-    elif command == ("remap v2"):
-        alpha.remap_v2()
     elif command == ("set purge"):
         alpha.purgeset()
+    elif command == ("execute saved protocol"):
+        alpha.execute_protocol("saved_protocol.csv")
     #### Parses basic functions from instructions
     else:
         parsed = com_parser(command)
@@ -66,9 +65,9 @@ while True:
                                 alpha.movetopurge(pumpid)
                                 alpha.dispense(pumpid,volume)
                         if wellid == []:
-                            print("No target well indicated. \n Ex. well a8")
+                            print("No target well indicated. \n Ex. a8")
                     if volume == []:
-                        print("No volume indicated. \n Ex. 200 microliters")
+                        print("No volume indicated. \n Ex. 200")
                 if action == "move":
                     if wellid != []:
                         if wellid != "purge":
@@ -78,9 +77,9 @@ while True:
                     if wellid == []:
                         print("No target well indicated. \n Ex. 'well a8' or 'purge'")
             if action == []:
-                print('No action found. Please type "dispense" or "move" to indicate \n what action you would like the pump to take.')
+                print('No action found. Please type a numerical volume to dispense. \n To move, indicate a pump and a location.')
         if pumpid == []:
-            print("Please indicate which pump you want to move. \n Ex. pump 4")
+            print("Please indicate which pump you want to move. \n Ex. p4")
 
     
     
