@@ -1,4 +1,4 @@
-from Sidekick_object_v3_4_micropython2 import Sidekick
+from Sidekick_object_v3_4_micropython import Sidekick
 from parser import com_parser
 
 
