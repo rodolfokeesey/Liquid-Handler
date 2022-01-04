@@ -1,0 +1,15 @@
+platefile = open("platemap1.txt","r")
+emptyplate = platefile.read()
+emptyplate = emptyplate.replace("\r", "").split("\n")
+platelength = int((len(emptyplate) - 4)/3)
+sectionlength = int((len(emptyplate) - 1)/3)
+theta_one = emptyplate[1:sectionlength]
+theta_one = [float(coords) for coords in theta_one]
+theta_two = emptyplate[sectionlength+1:sectionlength*2]
+theta_two = [float(coords) for coords in theta_two]
+well_ids = emptyplate[(sectionlength*2)+1:len(emptyplate)-1]
+
+platefile.close()
+
+print(well_ids)
+#return[theta_one,theta_two,well_ids]
