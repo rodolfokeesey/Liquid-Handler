@@ -695,7 +695,7 @@ class Sidekick:
         test = open(filename)
         stuff = test.read()
         stuff = stuff.replace("\r", "").split("\n")
-        stuff = stuff[1:len(stuff)]
+        stuff = stuff[1:]
 
         cmd = [stuff[i].split(",") for i in range(len(stuff) - 1)]
 
