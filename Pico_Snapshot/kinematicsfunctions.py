@@ -320,48 +320,31 @@ def forward_kinematics(L1,L2,L3,theta1,theta2):
     return p4
 
 #%% Simple movement in the xy plane .5 mm intervals. Up is in reference to the plate and the center of the dispenser.
+
+def motion(setting, theta1, theta2):
+    p4 = forward_kinematics(setting['L1'], setting['L2'], setting['L3'], theta1, theta2)
+    p4[0] -= setting['offset']
+    result = inverse_kinematics(setting['L1'], setting['L2'], setting['L3'],setting['origin'],p4) + p4 
+    return result
+
 def up(theta1,theta2):
     #standard dimensions, change if needed.
-    L1 = 7
-    L2 = 3
-    L3 = 10
-    origin = [0,0]
-    p4 = forward_kinematics(L1,L2,L3,theta1,theta2)
-    p4[0] = p4[0] - 0.05
-    results = [inverse_kinematics(L1,L2,L3,origin,p4)[0],inverse_kinematics(L1,L2,L3,origin,p4)[1],p4[0],p4[1]]
-    return results
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    return motion(setting, theta1, theta2)
 
 def down(theta1,theta2):
     #standard dimensions, change if needed.
-    L1 = 7
-    L2 = 3
-    L3 = 10
-    origin = [0,0]
-    p4 = forward_kinematics(L1,L2,L3,theta1,theta2)
-    p4[0] = p4[0] + 0.05
-    results = [inverse_kinematics(L1,L2,L3,origin,p4)[0],inverse_kinematics(L1,L2,L3,origin,p4)[1],p4[0],p4[1]]
-    return results
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    return motion(setting, theta1, theta2)
 
 def left(theta1,theta2):
     #standard dimensions, change if needed.
-    L1 = 7
-    L2 = 3
-    L3 = 10
-    origin = [0,0]
-    p4 = forward_kinematics(L1,L2,L3,theta1,theta2)
-    p4[1] = p4[1] - 0.05
-    results = [inverse_kinematics(L1,L2,L3,origin,p4)[0],inverse_kinematics(L1,L2,L3,origin,p4)[1],p4[0],p4[1]]
-    return results
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    return motion(setting, theta1, theta2)
 
 def right(theta1,theta2):
     #standard dimensions, change if needed.
-    L1 = 7
-    L2 = 3
-    L3 = 10
-    origin = [0,0]
-    p4 = forward_kinematics(L1,L2,L3,theta1,theta2)
-    p4[1] = p4[1] + 0.05
-    results = [inverse_kinematics(L1,L2,L3,origin,p4)[0],inverse_kinematics(L1,L2,L3,origin,p4)[1],p4[0],p4[1]]
-    return results
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    return motion(setting, theta1, theta2)
     
     
