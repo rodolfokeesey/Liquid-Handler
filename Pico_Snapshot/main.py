@@ -34,10 +34,7 @@ while True:
     if command in comdict:
         comdict[command]()
     else:
-        parsed = com_parser(command)
-        pumpid = parsed[0]
-        wellid = parsed[1]
-        volume = parsed[2]
+        pumpid, wellid, volume = com_parser(command)
         
         alpha.movetowell(pumpid,wellid)
         alpha.dispense(pumpid,volume)
