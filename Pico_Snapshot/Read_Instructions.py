@@ -1,14 +1,14 @@
-def read_instructions(filename)
+def read_instructions(filename):
     test = open(filename)
     stuff = test.read()
     stuff = stuff.replace("\r", "").split("\n")
-    stuff = stuff[2:len(stuff)]
+    stuff = stuff[2:]
 
     cmd = []
 
-    for i in range(len(stuff)):
-        print(i)
-        cmd.append(stuff[i].split(","))
+    for thing in stuff:
+        print(thing)
+        cmd.append(thing.split(","))
 
-    return[cmd]
+    return [cmd]
 
