@@ -33,7 +33,7 @@ def find_standard_position_angle(point):
     
     if x >= 0 and y >= 0:
         quadrant = 1
-    elif x <= 0 and y >= 0:
+    elif x <= 0 <= y:
         quadrant = 2
     elif x <= 0 and y <= 0:
         quadrant = 3
@@ -46,11 +46,13 @@ def find_standard_position_angle(point):
         standardangle = 0 + refangle
     elif quadrant == 2 or quadrant == 3:
         standardangle = 180 + refangle
+    else:
+        raise ValueError("quadrant not in [1,2,3,4]!")
         
     if standardangle < 0:
         standardangle = standardangle + 360
         
-    return(standardangle)
+    return standardangle
 
 #%% Calculating intersection of two circles (http://paulbourke.net/geometry/circlesphere/), (https://stackoverflow.com/questions/55816902/finding-the-intersection-of-two-circles)
 
@@ -80,7 +82,7 @@ def get_intersections(x0, y0, r0, x1, y1, r1):
         x4=round(x2-h*(y1-y0)/d,4)
         y4=round(y2+h*(x1-x0)/d,4)
         
-        return (x3, y3, x4, y4)
+        return x3, y3, x4, y4
 
 #%% Inverse Kinematics calculations
 
@@ -167,6 +169,8 @@ def inverse_kinematics(L1,L2,L3,origin,p4):
             p1 = p1b
             p2 = con2p2
             p3 = con2p3
+        else:
+            raise RuntimeError("no conformation was chosen")
             
         return[theta1,theta2,p1,p2,p3]
 
@@ -182,7 +186,8 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
     elif N == "N2" or N == "N4":
         #Formula for this length for nozzles 2 and 4
         nlength = math.sqrt(math.pow((L3+(Ln/math.sqrt(2))),2) + math.pow((Ln/math.sqrt(2)),2))
-    
+    else:
+        raise ValueError("input N is not allowed")
         
     p1 = get_intersections(ptarget[0],ptarget[1],nlength,origin[0],origin[1],L1) # Get the possible locations of point 1
     
@@ -216,7 +221,9 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
             n1thetaoffset = math.degrees(math.atan((Ln/math.sqrt(2))/(L3+(Ln/math.sqrt(2)))))
             # We add the offset from the standard angle, because the N4 Nozzle is below center position, so to find the center position we go up
             p4 = [round(p1a[0]+L3*math.cos(math.radians(n1standtheta+n1thetaoffset)),4), round(p1a[1]+L3*math.sin(math.radians(n1standtheta+n1thetaoffset)),4)]
-        
+        else:
+            raise ValueError("input N is not allowed")
+
         ## After using the offset, standard angle, and length of L3 to find P4, we can use our original Inverse Kinematics function
         results = inverse_kinematics(L1,L2,L3,origin,p4)
         con1theta1 = results[0]
@@ -249,7 +256,9 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
             n1thetaoffset = math.degrees(math.atan((Ln/math.sqrt(2))/(L3+(Ln/math.sqrt(2)))))
             # We add the offset from the standard angle, because the N4 Nozzle is below center position, so to find the center position we go up
             p4con2 = [round(p1b[0]+L3*math.cos(math.radians(n1standtheta+n1thetaoffset)),4), round(p1b[1]+L3*math.sin(math.radians(n1standtheta+n1thetaoffset)),4)]
-    
+        else:
+            raise ValueError("input N is not allowed")
+
         results = inverse_kinematics(L1,L2,L3,origin,p4con2)
         con2theta1 = results[0]
         con2theta2 = results[1]
@@ -302,6 +311,8 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
             p2 = con2p2
             p3 = con2p3
             p4 =p4con2
+        else:
+            raise RuntimeError("no conformation was chosen")
             
         finalresults = [theta1,theta2,p1,p2,p3,p4]
         return finalresults
