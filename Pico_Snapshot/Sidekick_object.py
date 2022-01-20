@@ -246,10 +246,10 @@ class Sidekick:
         platecycle = input("Would you like to cycle through the plating process? 'yes' or 'no'  ")
 
         if platecycle == "yes":
-            for i in range(len(self.wellids)):
-                thetas = kf.angle_lookup(self.wellids[i],self.wellids,self.alltheta1,self.alltheta2)
+            for well in self.wellids:
+                thetas = kf.angle_lookup(well,self.wellids,self.alltheta1,self.alltheta2)
                 self.advangleboth(thetas[0], thetas[1])
-                print(self.wellids[i], "| ideal thetas:", thetas, "actual thetas:", self.current)
+                print(well, "| ideal thetas:", thetas, "actual thetas:", self.current)
                 time.sleep(.4)
                 #self.pumpcycle()
 
@@ -268,21 +268,11 @@ class Sidekick:
         
         print(centerthetas)
         
-        thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N1",center,self.origin)
-        self.advangleboth(thetas[0], thetas[1])
-        time.sleep(.8)
-        
-        thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N2",center,self.origin)
-        self.advangleboth(thetas[0], thetas[1])
-        time.sleep(.8)
-        
-        thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N3",center,self.origin)
-        self.advangleboth(thetas[0], thetas[1])
-        time.sleep(.8)
-        
-        thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N4",center,self.origin)
-        self.advangleboth(thetas[0], thetas[1])
-        time.sleep(.8)
+        #loop over the different pump positions
+        for position in ["N1","N2", "N3","N4"]:
+            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,position,center,self.origin)
+            self.advangleboth(thetas[0], thetas[1])
+            time.sleep(.8)
         
         print(self.current)
         self.advangleboth(centerthetas[0], centerthetas[1])
@@ -296,8 +286,7 @@ class Sidekick:
     def movetowell(self, effector, target_wellid):
         """Move indicated effector to target well."""
         
-        validwell = [x for x in self.wellids if x == target_wellid]
-        if not validwell:
+        if target_wellid not in self.wellids:
             print("The target well is not in the current plate layout")
             return
         
