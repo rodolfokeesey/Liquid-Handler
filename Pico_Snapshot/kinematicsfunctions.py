@@ -21,13 +21,12 @@ def angle_lookup(well,wellids,alltheta1,alltheta2):
 
 def find_standard_position_angle(point):
 
-    x = point[0]
-    y = point[1]
-    
+    x, y = point[0:1]
+
     if x == 0:
-        refangle = 90
+        ref_angle = 90
     else:
-        refangle = math.degrees(math.atan(y/x))
+        ref_angle = math.degrees(math.atan(y/x))
     
     # Finds the quadrant
     
@@ -42,17 +41,17 @@ def find_standard_position_angle(point):
     
     # Finds the standard angle given reference angle and quadrant
     
-    if quadrant == 1 or quadrant == 4:
-        standardangle = 0 + refangle
-    elif quadrant == 2 or quadrant == 3:
-        standardangle = 180 + refangle
+    if quadrant in {1, 4}:
+        standard_angle = 0 + ref_angle
+    elif quadrant in {2, 3}:
+        standard_angle = 180 + ref_angle
     else:
         raise ValueError("quadrant not in [1,2,3,4]!")
         
-    if standardangle < 0:
-        standardangle = standardangle + 360
+    if standard_angle < 0:
+        standard_angle = standard_angle + 360
         
-    return standardangle
+    return standard_angle
 
 #%% Calculating intersection of two circles (http://paulbourke.net/geometry/circlesphere/), (https://stackoverflow.com/questions/55816902/finding-the-intersection-of-two-circles)
 
@@ -147,9 +146,10 @@ def inverse_kinematics(L1,L2,L3,origin,p4):
         
         intersect = set.intersection(set(theta1possible),set(theta2possible))
         
-        if len(intersect) == 0:
-            return print("All possible orientations violate mechanical constraints")
-            
+        if not intersect: # empty set
+            print("All possible orientations violate mechanical constraints")
+            return 
+ 
         elif len(intersect) > 1:
             #print("Two possible orientations, first orientation selected")
             theta1 = con1theta1
@@ -180,10 +180,10 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
 
     # First we need to define the length from P3 to the target nozzle N, we can do this with some trig
     
-    if N == "N1" or N == "N3":
+    if N in { "N1", "N3"}:
         # Formula for this length for nozzles 1 and 3
         nlength = math.sqrt(math.pow((L3-(Ln/math.sqrt(2))),2) + math.pow((Ln/math.sqrt(2)),2))
-    elif N == "N2" or N == "N4":
+    elif N in {"N2", "N4"}:
         #Formula for this length for nozzles 2 and 4
         nlength = math.sqrt(math.pow((L3+(Ln/math.sqrt(2))),2) + math.pow((Ln/math.sqrt(2)),2))
     else:
@@ -194,8 +194,8 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
     if p1 is None:
         print("No possible orientations")
     else:
-        p1a = [p1[0],p1[1]] # Conformation 1
-        p1b = [p1[2],p1[3]] # Conformation 2
+        p1a = p1[0:1] # Conformation 1
+        p1b = p1[2:3] # Conformation 2
         
         ## Solves for N, Conformation 1
         
@@ -271,22 +271,12 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
         theta1check = [con1theta1,con2theta1]
         theta2check = [con1theta2,con2theta2]
         
-        #Creates arrays of possible thetas to evaluate
-        theta1possible = []
-        theta2possible = []
-        
-        #Checks the mechanical constraints of the possible angles
-        for i in range(len(theta1check)):
-            if theta1check[i] <= 195:
-                theta1possible.append(i)
-        
-        for i in range(len(theta2check)):
-            if theta2check[i] <= 195:
-                theta2possible.append(i)
-        
+        #Creates arrays of possible thetas to evaluate by checking mechanical constraints of the possible angles
+        theta1possible = [i for i,v in enumerate(theta1check) if v <= 195]
+        theta2possible = [i for i,v in enumerate(theta2check) if v <= 195]        
         intersect = set.intersection(set(theta1possible),set(theta2possible))
         
-        if len(intersect) == 0:
+        if not intersect: # empty
             print("All possible orientations violate mechanical constraints")
         
         elif len(intersect) > 1:
@@ -323,7 +313,7 @@ def forward_kinematics(L1,L2,L3,theta1,theta2):
     #Define each of the vertex points by the angle and leg length
     p1 = [L1*math.cos(math.radians(theta1)),L1*math.sin(math.radians(theta1))]
     p2 = [L2*math.cos(math.radians(theta2)),L2*math.sin(math.radians(theta2))]
-    p3 = [p1[0]+p2[0],p1[1]+p2[1]]
+    p3 = [p1[0]+p2[0], p1[1]+p2[1]]
 
     #Parallel to L2, so add L3 and L2 to get the total length of the leg, multiply by theta 2, and subtract from p3
     p4 = [p3[0]-(L2+L3)*math.cos(math.radians(theta2)),p3[1]-(L2+L3)*math.sin(math.radians(theta2))]
