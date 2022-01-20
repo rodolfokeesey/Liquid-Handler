@@ -136,10 +136,9 @@ class Sidekick:
         emptyplate = emptyplate.split("\n")
         platelength = int((len(emptyplate) - 4)/3)
         sectionlength = int((len(emptyplate) - 1)/3)
-        theta_one = emptyplate[1:sectionlength]
-        theta_one = [float(coords) for coords in theta_one]
-        theta_two = emptyplate[sectionlength+1:sectionlength*2]
-        theta_two = [float(coords) for coords in theta_two]
+   
+        theta_one = [float(coords) for coords in emptyplate[1:sectionlength] ]
+        theta_two = [float(coords) for coords in emptyplate[sectionlength+1:sectionlength*2] ]
         well_ids = emptyplate[(sectionlength*2)+1:len(emptyplate)-1]
         platefile.close()
         return[theta_one,theta_two,well_ids]
@@ -305,25 +304,11 @@ class Sidekick:
         if effector == "center":
             thetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
             self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p1":
+        elif effector in {"p1", "p2", "p3", "p4"}:
+            pump_label = effector.replace("p","N")
             wellthetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
             center = kf.forward_kinematics(self.L1,self.L2,self.L3,wellthetas[0],wellthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N1",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p2":
-            wellthetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,wellthetas[0],wellthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N2",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p3":
-            wellthetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,wellthetas[0],wellthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N3",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p4":
-            wellthetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,wellthetas[0],wellthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N4",center,self.origin)
+            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,center,self.origin)
             self.advangleboth(thetas[0], thetas[1])
         else:
             print("Indicated pump not recognized")
@@ -335,21 +320,10 @@ class Sidekick:
         
         if effector == "center":
             self.advangleboth(targetthetas[0], targetthetas[1])
-        elif effector == "p1":
+        elif effector in {"p1", "p2", "p3", "p4"}:
+            pump_label = effector.replace("p","N")
             center = kf.forward_kinematics(self.L1,self.L2,self.L3,targetthetas[0],targetthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N1",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p2":
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,targetthetas[0],targetthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N2",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p3":
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,targetthetas[0],targetthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N3",center,self.origin)
-            self.advangleboth(thetas[0], thetas[1])
-        elif effector == "p4":
-            center = kf.forward_kinematics(self.L1,self.L2,self.L3,targetthetas[0],targetthetas[1])
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,"N4",center,self.origin)
+            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,center,self.origin)
             self.advangleboth(thetas[0], thetas[1])
         else:
             print("Indicated pump not recognized")
@@ -377,7 +351,7 @@ class Sidekick:
             ool = 1
             pumpid = input("Which pump would you like to purge? \n Type 'p1', 'p2', 'p3', or 'p4' and hit enter.   ")
             
-            if pumpid == "p1" or pumpid == "p2" or pumpid == "p3" or pumpid == "p4":
+            if pumpid in {"p1", "p2", "p3", "p4"}:
                 self.movetothetas(pumpid,self.purge)
                 timer = 0
                 outerloop = 1
@@ -713,16 +687,14 @@ class Sidekick:
 
         commands = self.read_instructions("saved_protocol.csv")
         print(commands)
-        for i in range(len(commands)):
-            pumpid = commands[i][0]
-            targetwell = commands[i][1]
-            desiredamount = float(commands[i][2])
+        for cmd in commands:
+            pumpid, targetwell, desiredamount = cmd[0:2]
             #print(targetwell)
             #print(pumpid)
             #print(desiredamount)
             
             self.movetowell(pumpid,targetwell)
-            self.dispense(pumpid,desiredamount)
+            self.dispense(pumpid, float(desiredamount))
 
 
                 
