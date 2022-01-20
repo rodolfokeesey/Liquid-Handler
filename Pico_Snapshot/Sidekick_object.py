@@ -15,7 +15,7 @@ class Sidekick:
         self.Ln = Ln
         
         # Locational Attributes, home is subject to change, right now it is over well a12
-        self.home = [90,178]
+        self.home = [90,178]  # there is a `Home` parameter not used in init
         self.origin = Origin
         self.current = Effector_Location #Angular location of stepper
         self.purge = self.loadpurge() #[45.7808, 89.6624]
@@ -127,7 +127,8 @@ class Sidekick:
     
     # Plate loading function
     
-    def loadplate(self):
+    @staticmethod
+    def loadplate():
         """Take the save text file of well coordinates and read it into memory."""
         
         platefile = open("platemap1.txt","r")
@@ -145,7 +146,8 @@ class Sidekick:
     
     # Purge location loading
     
-    def loadpurge(self):
+    @staticmethod
+    def loadpurge():
         """Take the save text file of purge coordinates and read it into memory."""
         
         purgefile = open("purge1.txt","r")
@@ -296,7 +298,7 @@ class Sidekick:
         """Move indicated effector to target well."""
         
         validwell = [x for x in self.wellids if x == target_wellid]
-        if validwell == []:
+        if not validwell:
             print("The target well is not in the current plate layout")
             return
         
@@ -411,7 +413,7 @@ class Sidekick:
         """Dispense the commanded amount of liquid from the indicated pump (10 microliter aliquots)."""
         
         actualamount = round(desiredamount/10)*10
-        cycles = actualamount/10
+        cycles = round(actualamount/10)
         if cycles != 0:
             print("dispensing", actualamount)
         
@@ -689,7 +691,8 @@ class Sidekick:
     
     # Reads a CSV file and turns it into commands.
     
-    def read_instructions(self, filename):
+    @staticmethod
+    def read_instructions(filename):
         """Read a CSV file and turn it into commands."""
         
         test = open(filename)
