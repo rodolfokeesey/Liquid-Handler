@@ -132,7 +132,7 @@ class Sidekick:
         """Take the save text file of well coordinates and read it into memory."""
         
         platefile = open("platemap1.txt","r")
-        emptyplate = platefile.read()
+        emptyplate = platefile.read().replace('\r','')
         emptyplate = emptyplate.split("\n")
         platelength = int((len(emptyplate) - 4)/3)
         sectionlength = int((len(emptyplate) - 1)/3)
@@ -297,6 +297,8 @@ class Sidekick:
             pump_label = effector.replace("p","N")
             wellthetas = kf.angle_lookup(target_wellid,self.wellids,self.alltheta1,self.alltheta2)
             center = kf.forward_kinematics(self.L1,self.L2,self.L3,wellthetas[0],wellthetas[1])
+            #print (center)
+            #print (pump_label)
             thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,center,self.origin)
             self.advangleboth(thetas[0], thetas[1])
         else:
@@ -380,6 +382,7 @@ class Sidekick:
         if cycles != 0:
             print("dispensing", actualamount)
         
+        
         if pump == "p1":
             for i in range(cycles):
                 self.pump1.value(1)
@@ -416,6 +419,8 @@ class Sidekick:
                 time.sleep(.1)
                 #print("de-energize")
                 #print(i)
+        elif pump == "center":
+            pass
         else:
             print("Indicated pump is not recognized")
 
@@ -677,7 +682,7 @@ class Sidekick:
         commands = self.read_instructions("saved_protocol.csv")
         print(commands)
         for cmd in commands:
-            pumpid, targetwell, desiredamount = cmd[0:2]
+            pumpid, targetwell, desiredamount = cmd[0:3]
             #print(targetwell)
             #print(pumpid)
             #print(desiredamount)

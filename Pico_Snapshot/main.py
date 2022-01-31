@@ -33,6 +33,8 @@ while True:
     
     if command in comdict:
         comdict[command]()
+    elif command == "":
+        continue
     else:
         pumpid, wellid, volume = com_parser(command)
         

@@ -22,13 +22,13 @@ def remap_plate(A1,A12,H1,H12,L1,L2,L3,origin):
     flattened_coords = [val for sublist in all_coord for val in sublist]
 
     # Uses inverse kinematics to convert to thetas
-    thetas = [kf.inverse_kinematics(L1,L2,L3,origin,f) for f in flattened_coords]
-    theta1 = thetas[:][0] 
-    theta2 = thetas[:][1] 
+    thetas = [kf.inverse_kinematics(L1,L2,L3,origin,flattened_coords[i]) for i in range(len(flattened_coords))]
+    theta1 = [thetas[i][0] for i in range(len(thetas))]
+    theta2 = [thetas[i][1] for i in range(len(thetas))]
 
     # Fills well ID list
     row = ["a","b","c","d","e","f","g","h"]
-    column = [str(i) for i in range(1,13)]
-    wellids = [r+c for r in row for c in column]
+    column = list(map(str, list(range(1,13))))
+    wellids = [row[i] + column[j] for i in range(len(row)) for j in range(len(column))]
     
     return [theta1,theta2,wellids]

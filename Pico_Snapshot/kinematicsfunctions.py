@@ -21,7 +21,7 @@ def angle_lookup(well,wellids,alltheta1,alltheta2):
 
 def find_standard_position_angle(point):
 
-    x, y = point[0:1]
+    x, y = point[0:2]
 
     if x == 0:
         ref_angle = 90
@@ -81,7 +81,7 @@ def get_intersections(x0, y0, r0, x1, y1, r1):
         x4=round(x2-h*(y1-y0)/d,4)
         y4=round(y2+h*(x1-x0)/d,4)
         
-        return x3, y3, x4, y4
+        return (x3, y3, x4, y4)
 
 #%% Inverse Kinematics calculations
 
@@ -194,11 +194,11 @@ def inverse_kinematics_multi(L1,L2,L3,Ln,N,ptarget,origin):
     if p1 is None:
         print("No possible orientations")
     else:
-        p1a = p1[0:1] # Conformation 1
-        p1b = p1[2:3] # Conformation 2
+        p1a = p1[0:2] # Conformation 1
+        p1b = p1[2:4] # Conformation 2
         
         ## Solves for N, Conformation 1
-        
+
         n1vector = [ptarget[0]-p1a[0],ptarget[1]-p1a[1]] #finds the n1 vector
         n1standtheta = find_standard_position_angle(n1vector) #Finding the standard position angle for the n1 vector
         
@@ -324,28 +324,29 @@ def forward_kinematics(L1,L2,L3,theta1,theta2):
 
 def motion(setting, theta1, theta2):
     p4 = forward_kinematics(setting['L1'], setting['L2'], setting['L3'], theta1, theta2)
-    p4[0] -= setting['offset']
+    p4[0] += setting['offset_p4_0']
+    p4[1] += setting['offset_p4_1']
     result = inverse_kinematics(setting['L1'], setting['L2'], setting['L3'],setting['origin'],p4) + p4 
     return result
 
 def up(theta1,theta2):
     #standard dimensions, change if needed.
-    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset_p4_0":-0.05, "offset_p4_1":0.00}
     return motion(setting, theta1, theta2)
 
 def down(theta1,theta2):
     #standard dimensions, change if needed.
-    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset_p4_0":0.05, "offset_p4_1":0.00}
     return motion(setting, theta1, theta2)
 
 def left(theta1,theta2):
     #standard dimensions, change if needed.
-    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset_p4_0":0.00, "offset_p4_1":-0.05}
     return motion(setting, theta1, theta2)
 
 def right(theta1,theta2):
     #standard dimensions, change if needed.
-    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset":0.05}
+    setting = {"L1":7, "L2":3, "L3":10, "origin":[0,0], "offset_p4_0":0.00, "offset_p4_1":0.05}
     return motion(setting, theta1, theta2)
     
     
