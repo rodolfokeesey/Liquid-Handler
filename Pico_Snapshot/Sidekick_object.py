@@ -286,7 +286,10 @@ class Sidekick:
     def movetowell(self, effector, target_wellid):
         """Move indicated effector to target well."""
         
-        if target_wellid not in self.wellids:
+        if target_wellid == "purge":
+            self.movetopurge(effector)
+            return
+        elif target_wellid not in self.wellids:
             print("The target well is not in the current plate layout")
             return
         
@@ -538,8 +541,7 @@ class Sidekick:
         """Allow the user to move the effector freely, then print position."""
         
         nearestwell = input("enter closest well  ")
-        thetas =  kf.angle_lookup(nearestwell,self.wellids,self.alltheta1,self.alltheta2)
-        self.advangleboth(thetas[0], thetas[1])
+        self.movetowell("center", nearestwell) 
         while True:
             direction = input("enter direction with w,a,s,d, the hit enter. If finished, enter 'finished'  ")
             if direction == "s":
