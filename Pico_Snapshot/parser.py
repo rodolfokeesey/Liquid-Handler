@@ -19,15 +19,15 @@ def gcode_parser(command):
         cmd = tokens.pop()
 
         if cmd == "x": # handle space between X and input
-            x = float(tokens.pop())
+            x = float(tokens.pop())/10.
         elif cmd[0] == "x": #handle no space after x
-            x = float(cmd[1:])
+            x = float(cmd[1:])/10.  # gcode uses units of millimeters, convert to centimeters
         elif cmd == "y":
-            y = float(tokens.pop())
+            y = float(tokens.pop())/10.
         elif cmd[0] == "y":
-            y = float(cmd[1:])
+            y = float(cmd[1:])/10.
         elif cmd == "e":
-            volumes = [float(v) for v in tokens.pop().split(";")]
+            volumes = [float(v) for v in tokens.pop().split(";")] # assume uL units
         elif cmd[0] == "e":
             volumes = [float(v) for v in cmd[1:].split(";")]
 
