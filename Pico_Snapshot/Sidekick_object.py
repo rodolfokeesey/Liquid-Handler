@@ -377,55 +377,36 @@ class Sidekick:
     ##%% DISPENSE FUNCTIONS
     
     # Dispenses the commanded amount of liquid from the indicated pump (10 microliter aliquots)
-    def dispense(self,pump,desiredamount):
+    def dispense(self, pumpLabel, desiredamount):
         """Dispense the commanded amount of liquid from the indicated pump (10 microliter aliquots)."""
         
         actualamount = round(desiredamount/10)*10
         cycles = round(actualamount/10)
         if cycles != 0:
             print("dispensing", actualamount)
+
+        pumpDictionary = {
+            "p1": self.pump1,
+            "p2": self.pump2,
+            "p3": self.pump3,
+            "p4": self.pump4
+        }    
         
-        
-        if pump == "p1":
+        if pumpLabel in pumpDictionary: 
+            pump = pumpLookup.get(pumpLabel)
             for i in range(cycles):
-                self.pump1.value(1)
+                pump.value(1)
                 time.sleep(.1)
                 #print("energize")
-                self.pump1.value(0)
+                pump.value(0)
                 time.sleep(.1)
                 #print("de-energize")
                 #print(i)
-        elif pump == "p2":
-            for i in range(cycles):
-                self.pump2.value(1)
-                time.sleep(.1)
-                #print("energize")
-                self.pump2.value(0)
-                time.sleep(.1)
-                #print("de-energize")
-                #print(i)
-        elif pump == "p3":
-            for i in range(cycles):
-                self.pump3.value(1)
-                time.sleep(.1)
-                #print("energize")
-                self.pump3.value(0)
-                time.sleep(.1)
-                #print("de-energize")
-                #print(i)
-        elif pump == "p4":
-            for i in range(cycles):
-                self.pump4.value(1)
-                time.sleep(.1)
-                #print("energize")
-                self.pump4.value(0)
-                time.sleep(.1)
-                #print("de-energize")
-                #print(i)
-        elif pump == "center":
+
+        elif pumpLabel == "center":
             pass
         else:
-            print("Indicated pump is not recognized")
+            print("Indicated pump label ", pumpLabel, " is not recognized")
 
     # Finds the endpoints, run first whenever waking the machine!
     
@@ -678,10 +659,10 @@ class Sidekick:
     
     # Takes a CSV file of instructions, and plates them.
     
-    def execute_protocol(self):
+    def execute_protocol(self, filename="saved_protocol.csv"):
         """Take a CSV file of instructions, and plate them."""
 
-        commands = self.read_instructions("saved_protocol.csv")
+        commands = self.read_instructions(filename)
         print(commands)
         for cmd in commands:
             pumpid, targetwell, desiredamount = cmd[0:3]
