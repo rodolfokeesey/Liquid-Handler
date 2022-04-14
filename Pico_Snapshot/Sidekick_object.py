@@ -281,8 +281,21 @@ class Sidekick:
 
     ##%% PUMP MOVEMENT METHODS
     
-    # Simple move to well function. Moves indicated effector to target well.
+    # Simple move to well function. Moves indicated effector to target well
     
+     def movetoXY(self, effector, x, y):
+        """Move indicated effector to target well as specified by a cartesian X,Y pair"""
+        if effector == "center":
+            #Calculates the angular position from given x,y
+            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,[x,y],self.origin)
+            self.advangleboth(thetas[0], thetas[1])
+        elif effector in {"p1", "p2", "p3", "p4"}:
+            pump_label = effector.replace("p","N")
+            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,[x,y],self.origin)
+            self.advangleboth(thetas[0], thetas[1])
+        else:
+            print("Indicated pump not recognized")
+
     def movetowell(self, effector, target_wellid):
         """Move indicated effector to target well."""
         
@@ -382,8 +395,12 @@ class Sidekick:
         
         actualamount = round(desiredamount/10)*10
         cycles = round(actualamount/10)
-        if cycles != 0:
-            print("dispensing", actualamount)
+        
+        # escape if nothing gets pumped
+        if cycles == 0:
+            return
+
+        print("dispensing", actualamount)
 
         pumpDictionary = {
             "p1": self.pump1,
@@ -519,7 +536,7 @@ class Sidekick:
     def current_xy(self):
         """returns the current [x, y] position as a list"""
         return kf.forward_kinematics(self.L1,self.L2,self.L3,self.current[0],self.current[1])
-        
+
 
     # Allows the user to move the effector freely, then prints position.
     

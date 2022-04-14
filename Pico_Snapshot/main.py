@@ -48,15 +48,21 @@ while True:
         elif command[0]=="g":  # interpret it as gcode
             pumpid, x, y, volumes = gcode_parser(command)
             
+            # if x or y (or both) are not specified by G-Code, then use the current value
             currentXY = alpha.current_xy()
-            if x is None:
+           
+            if x is None:  
                 x = currentXY[0]
             if y is None:
                 y = currentXY[1]
 
-            ### TODO - ROD—functions for moving to specific xy location
+            # move to desired position
              alpha.movetoXY("center", x, y)
 
+            # perform dispense for each pump in order 
+            # NOTE: This is probably not the desired operation, as it will dispense from these pumps with the 
+            #       center defined as above, rather than with the given pump output in that location.
+            
             if volumes is not None:
                 for (i,v) in enumerate(volumes):
                     pumpid = "p"+str(i+1)
