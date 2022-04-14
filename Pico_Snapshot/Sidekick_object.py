@@ -516,6 +516,11 @@ class Sidekick:
         self.initialize()
 
     
+    def current_xy(self):
+        """returns the current [x, y] position as a list"""
+        return kf.forward_kinematics(self.L1,self.L2,self.L3,self.current[0],self.current[1])
+        
+
     # Allows the user to move the effector freely, then prints position.
     
     def freemove(self):

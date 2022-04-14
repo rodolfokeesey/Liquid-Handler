@@ -1,5 +1,5 @@
 from Sidekick_object import Sidekick
-from parser import com_parser
+from parser import com_parser, gcode_parser
 
 
 # Defines an instance of the Sidekick
@@ -48,9 +48,14 @@ while True:
         elif command[0]=="g":  # interpret it as gcode
             pumpid, x, y, volumes = gcode_parser(command)
             
-            if x is not None and y is not None:
-                ### TODO - ROD—functions for moving to specific xy location
-                alpha.movetoXY("center", x, y)
+            currentXY = alpha.current_xy()
+            if x is None:
+                x = currentXY[0]
+            if y is None:
+                y = currentXY[1]
+
+            ### TODO - ROD—functions for moving to specific xy location
+             alpha.movetoXY("center", x, y)
 
             if volumes is not None:
                 for (i,v) in enumerate(volumes):
