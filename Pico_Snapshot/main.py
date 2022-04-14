@@ -26,7 +26,7 @@ comdict = {
         "g29" : alpha.remap,
         "m17" : alpha.wake,
         "m18" : alpha.freemove,
-        "m23" : alpha.execute_protocol
+        "m24" : alpha.execute_protocol
         }
 
 # Main loop, awaiting command
