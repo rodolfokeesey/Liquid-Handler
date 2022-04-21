@@ -8,7 +8,7 @@ def gcode_parser(command):
     tokens = command.split()
     tokens.reverse()
 
-    print(tokens)
+    #print(tokens)
     cmd = tokens.pop()
 
     if cmd != "g0":

@@ -178,12 +178,11 @@ class Sidekick:
         time.sleep(self.stepdelay)
     
     # Basic movement function. Moves the steppers to a new angular position, then updates current angular position.
-    
-    #step size at 32 microsteps, 0.9 degree stepper is .028125
+
     
     def advangleboth(self,newangle1,newangle2):
         """Move the steppers to a new angular position, update current angular position."""
-
+    
         steps_one = round(abs(newangle1-self.current[0])/self.stepsize)
         final_one = self.current[0] + (round((newangle1-self.current[0])/self.stepsize))*self.stepsize
         steps_two = round(abs(newangle2-self.current[1])/self.stepsize)
@@ -283,16 +282,22 @@ class Sidekick:
     
     # Simple move to well function. Moves indicated effector to target well
     
-     def movetoXY(self, effector, x, y):
+    def movetoXY(self, effector, x, y):
         """Move indicated effector to target well as specified by a cartesian X,Y pair"""
         if effector == "center":
             #Calculates the angular position from given x,y
-            thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,[x,y],self.origin)
-            self.advangleboth(thetas[0], thetas[1])
+            thetas = kf.inverse_kinematics(self.L1,self.L2,self.L3,self.origin,[x,y])
+            try:
+                self.advangleboth(thetas[0], thetas[1])
+            except:
+                print("Cannot move to position")
         elif effector in {"p1", "p2", "p3", "p4"}:
             pump_label = effector.replace("p","N")
             thetas = kf.inverse_kinematics_multi(self.L1,self.L2,self.L3,self.Ln,pump_label,[x,y],self.origin)
-            self.advangleboth(thetas[0], thetas[1])
+            try:
+                self.advangleboth(thetas[0], thetas[1])
+            except:
+                print("Cannot move to position")
         else:
             print("Indicated pump not recognized")
 
@@ -360,6 +365,7 @@ class Sidekick:
             
             if pumpid in {"p1", "p2", "p3", "p4"}:
                 self.movetothetas(pumpid,self.purge)
+                print("Press and hold the purge button to begin purging line. Release the button to stop.")
                 timer = 0
                 outerloop = 1
                 while outerloop == 1:
@@ -374,7 +380,7 @@ class Sidekick:
                         timer=timer+1
                     if self.purgebutton.value() == 1 and timer >= 40:
                         stop = input("Type stop if you want stop. Type anything else if you'd like to continue purging this pump.  ")
-                        if stop == "stop":
+                        if stop == "stop" or self.purgebutton.value() == 0:
                             timer = 0
                             outerloop = 0
                         else:
@@ -383,6 +389,7 @@ class Sidekick:
             if cont == "yes":
                 ool = 1
             if cont != "yes":
+                self.return_home()
                 break
         
         
@@ -410,7 +417,7 @@ class Sidekick:
         }    
         
         if pumpLabel in pumpDictionary: 
-            pump = pumpLookup.get(pumpLabel)
+            pump = pumpDictionary.get(pumpLabel)
             for i in range(cycles):
                 pump.value(1)
                 time.sleep(.1)
@@ -536,6 +543,14 @@ class Sidekick:
     def current_xy(self):
         """returns the current [x, y] position as a list"""
         return kf.forward_kinematics(self.L1,self.L2,self.L3,self.current[0],self.current[1])
+    
+    def print_angular_position(self):
+        """prints the current [theta_1, theta_2] position as a list"""
+        print(self.current[0],self.current[1])
+        
+    def print_current_xy(self):
+        """returns the current [x, y] position as a list"""
+        print(kf.forward_kinematics(self.L1,self.L2,self.L3,self.current[0],self.current[1]))
 
 
     # Allows the user to move the effector freely, then prints position.

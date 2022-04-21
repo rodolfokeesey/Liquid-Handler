@@ -7,13 +7,14 @@ alpha = Sidekick(7,3,10,0.5,[0,0],[90,178],[119.484,171.701])
 
 # On startup, homes position
 alpha.initialize()
-#alpha.release()
 
 
 # Dictionary of available commands
 comdict = {
         "initialize" : alpha.initialize,
         "hardware check" : alpha.hardwarecheck,
+        "xy position" : alpha.print_current_xy,
+        "angular position" : alpha.print_angular_position,
         "free move" : alpha.freemove,
         "sleep" : alpha.release,
         "wake" : alpha.wake,
@@ -25,7 +26,7 @@ comdict = {
         "g28" : alpha.return_home,  # G-CODE equivalent comamnds
         "g29" : alpha.remap,
         "m17" : alpha.wake,
-        "m18" : alpha.freemove,
+        "m18" : alpha.release,
         "m24" : alpha.execute_protocol
         }
 
@@ -46,8 +47,9 @@ while True:
             alpha.movetowell(pumpid,wellid)
             alpha.dispense(pumpid,volume)
         elif command[0]=="g":  # interpret it as gcode
-            pumpid, x, y, volumes = gcode_parser(command)
+            x, y, volumes = gcode_parser(command)
             
+            #print([x,y])
             # if x or y (or both) are not specified by G-Code, then use the current value
             currentXY = alpha.current_xy()
            
@@ -57,7 +59,7 @@ while True:
                 y = currentXY[1]
 
             # move to desired position
-             alpha.movetoXY("center", x, y)
+            alpha.movetoXY("center", x, y)
 
             # perform dispense for each pump in order 
             # NOTE: This is probably not the desired operation, as it will dispense from these pumps with the 
