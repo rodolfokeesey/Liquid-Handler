@@ -373,7 +373,7 @@ class Sidekick:
                     if self.purgebutton.value() == 0:
                         timer = 0
                         self.dispense(pumpid,10)
-                        print(self.purgebutton.value())
+                        #print(self.purgebutton.value())
                         time.sleep(.01)
                     if self.purgebutton.value() == 1:
                         time.sleep(.1)
