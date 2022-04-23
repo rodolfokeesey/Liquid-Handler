@@ -8,6 +8,18 @@ The Sidekick is a desktop liquid dispensing robot, compatible with standard 
 This project is at the end of the prototype phase, and is being submitted to HardwareX. Right now, if you'd like to get started with building, take a look at the assembly guide located in the "Supporting Documentation" folder. This currently covers the mechanical assembly, the wiring, and getting started with the Sidekick's software.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 Copyright Rodolfo Keesey 2022.                                                    
                                                                              
 This source describes Open Hardware and is licensed under the CERN-OHL-S v2. 
