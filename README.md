@@ -6,3 +6,22 @@ The Sidekick is a desktop liquid dispensing robot, compatible with standard 
 
 
 This project is at the end of the prototype phase, and is being submitted to HardwareX. Right now, if you'd like to get started with building, take a look at the assembly guide located in the "Supporting Documentation" folder. This currently covers the mechanical assembly, the wiring, and getting started with the Sidekick's software.
+
+
+Copyright Rodolfo Keesey 2022.                                                    
+                                                                             
+This source describes Open Hardware and is licensed under the CERN-OHL-S v2. 
+                                                                             
+You may redistribute and modify this source and make products using it under 
+the terms of the CERN-OHL-S v2 (https://ohwr.org/cern_ohl_s_v2.txt).         
+                                                                             
+This source is distributed WITHOUT ANY EXPRESS OR IMPLIED WARRANTY,          
+INCLUDING OF MERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A         
+PARTICULAR PURPOSE. Please see the CERN-OHL-S v2 for applicable conditions.  
+                                                                             
+Source location: https://github.com/rodolfokeesey/Liquid-Handler                                        
+                                                                             
+As per CERN-OHL-S v2 section 4, should You produce hardware based on this    
+source, You must where practicable maintain the Source Location visible      
+on the external case of the Gizmo or other products you make using this      
+source.         

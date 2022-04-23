@@ -1,0 +1,4 @@
+In accordance with CERN-OHL-S v2, anyone modifying the design should provide brief information about the modifications,
+including the date they were made, in this text document. 
+
+Information about this design and modification should be added to this text file, but never removed.
