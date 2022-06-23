@@ -7,6 +7,8 @@ The Sidekick is a desktop liquid dispensing robot, compatible with standard 
 
 A complete description of the project and build instructions is available in R. Keesey, R, LeSeur, J. Schrier, “Sidekick: A Low-Cost Open-Source 3D Printed Liquid Dispensing Robot” _Hardware X_ 12, E00319 (2022) [doi:10.1016/j.ohx.2022.e00319](https://doi.org/doi:10.1016/j.ohx.2022.e00319)  
 
+You can also see a video of it in action online: https://www.youtube.com/watch?v=fTURNI88WFQ
+
 But if you don't want to read the paper, and just want to get started with building, take a look at the assembly guide located in the "Supporting Documentation" folder. This currently covers the mechanical assembly, the wiring, and getting started with the Sidekick's software.
 
 
