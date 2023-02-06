@@ -1,3 +1,9 @@
-The full STEP model of the Sidekick is too large to host. You can download it here:
+The full model of the Sidekick is too large to host on GitHub. 
+
+You can download it here (.STEP):
 
 https://drive.google.com/file/d/1ixu_sJcHN8C959OuZ0lleuiCjruZTeNM/view?usp=sharing
+
+Or here (.f360):
+
+https://drive.google.com/file/d/1-_fRdbV1oF3euVx34Ysh9thHAF1UIZZc/view?usp=sharing
